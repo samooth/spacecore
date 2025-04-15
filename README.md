@@ -1,6 +1,6 @@
 # bitspacecore
 
-### [See the full API docs at docs.pears.com](https://docs.space.bsv.direct/building-blocks/bitspacecore)
+### [See the full API docs at docs.space.bsv.direct](https://docs.space.bsv.direct/building-blocks/bitspacecore)
 
 BitSpacecore is a secure, distributed append-only log.
 
@@ -14,9 +14,6 @@ Built for sharing large datasets and streams of real time data
 * **Secure.** Uses signed merkle trees to verify log integrity in real time.
 * **Modular.** Spacecore aims to do one thing and one thing well - distributing a stream of data.
 
-Note that the latest release is Spacecore 10, which adds support for truncate and many other things.
-Version 10 is not compatible with earlier versions (9 and earlier), but is considered LTS, meaning the storage format and wire protocol is forward compatible with future versions.
-
 ## Install
 
 ```sh
@@ -24,9 +21,7 @@ npm install bitspacecore
 ```
 
 > [!NOTE]
-> This readme reflects Spacecore 11, our latest major version that is backed by RocksDB for storage and atomicity.
-> Whilst we are fully validating that, the npm dist-tag for latest is set to latest version of Spacecore 10, the previous major, to avoid too much disruption.
-> It will be updated to 11 in a few weeks.
+> This readme reflects Spacecore, backed by RocksDB for storage and atomicity.
 
 ## API
 
