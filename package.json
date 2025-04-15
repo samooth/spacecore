@@ -1,6 +1,6 @@
 {
   "name": "bitspacecore",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Spacecore is a secure, distributed append-only log",
   "main": "index.js",
   "scripts": {
