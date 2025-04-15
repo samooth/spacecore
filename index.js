@@ -6,7 +6,7 @@ const c = require('compact-encoding')
 const b4a = require('b4a')
 const NoiseSecretStream = require('spaceswarm-secret-stream')
 const Protomux = require('protomux')
-const id = require('../spacecore-id-encoding')
+const id = require('spacecore-id-encoding')
 const safetyCatch = require('safety-catch')
 const unslab = require('unslab')
 
