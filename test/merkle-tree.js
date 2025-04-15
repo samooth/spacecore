@@ -1,7 +1,7 @@
 const test = require('brittle')
 const b4a = require('b4a')
-const CoreStorage = require('hypercore-storage')
-const crypto = require('hypercore-crypto')
+const CoreStorage = require('spacecore-storage')
+const crypto = require('spacecore-crypto')
 const { ReorgBatch, MerkleTreeBatch, MerkleTree } = require('../lib/merkle-tree')
 
 test('missing nodes', async function (t) {

@@ -1,17 +1,17 @@
 const test = require('brittle')
-const crypto = require('hypercore-crypto')
+const crypto = require('../../spacecore-crypto')
 const c = require('compact-encoding')
 const b4a = require('b4a')
 const { create, createStorage } = require('./helpers')
 
-const Hypercore = require('../')
+const Spacecore = require('../')
 
 test('sessions - can create writable sessions from a read-only core', async function (t) {
   t.plan(5)
 
   const storage = await createStorage(t)
   const keyPair = crypto.keyPair()
-  const core = new Hypercore(storage, keyPair.publicKey, {
+  const core = new Spacecore(storage, keyPair.publicKey, {
     valueEncoding: 'utf-8'
   })
   await core.ready()
@@ -44,7 +44,7 @@ test('sessions - can create writable sessions from a read-only core', async func
 
 test('sessions - custom valueEncoding on session', async function (t) {
   const storage = await createStorage(t)
-  const core1 = new Hypercore(storage)
+  const core1 = new Spacecore(storage)
   await core1.append(c.encode(c.raw.json, { a: 1 }))
 
   const core2 = core1.session({ valueEncoding: 'json' })
@@ -59,7 +59,7 @@ test('sessions - custom valueEncoding on session', async function (t) {
 
 test('sessions - truncate a checkout session', async function (t) {
   const storage = await createStorage(t)
-  const core = new Hypercore(storage)
+  const core = new Spacecore(storage)
 
   for (let i = 0; i < 10; i++) await core.append(b4a.from([i]))
 
@@ -83,14 +83,14 @@ test('sessions - truncate a checkout session', async function (t) {
 test.skip('session on a from instance does not inject itself to other sessions', async function (t) {
   const a = await create(t, { })
 
-  const b = new Hypercore({ core: a.core, encryptionKey: null })
+  const b = new Spacecore({ core: a.core, encryptionKey: null })
   await b.ready()
 
-  const c = new Hypercore({ core: a.core, encryptionKey: null })
+  const c = new Spacecore({ core: a.core, encryptionKey: null })
   await c.ready()
   await c.setEncryptionKey(b4a.alloc(32))
 
-  const d = new Hypercore({ core: a.core, encryptionKey: null })
+  const d = new Spacecore({ core: a.core, encryptionKey: null })
   await d.ready()
 
   t.absent(a.encryption)
@@ -105,7 +105,7 @@ test.skip('session on a from instance does not inject itself to other sessions',
 
 test('sessions - cannot set checkout if name not set', async function (t) {
   const storage = await createStorage(t)
-  const core = new Hypercore(storage)
+  const core = new Spacecore(storage)
   await core.append('Block0')
 
   t.exception(
@@ -122,11 +122,11 @@ test('sessions - checkout breaks prologue', async function (t) {
   const storage = await createStorage(t)
   const storage2 = await createStorage(t)
 
-  const core = new Hypercore(storage)
+  const core = new Spacecore(storage)
 
   for (let i = 0; i < 10; i++) await core.append(b4a.from([i]))
 
-  const prologued = new Hypercore(storage2, {
+  const prologued = new Spacecore(storage2, {
     manifest: {
       ...core.manifest,
       prologue: {

@@ -1,6 +1,6 @@
 const test = require('brittle')
 const b4a = require('b4a')
-const Hypercore = require('..')
+const Spacecore = require('..')
 const { create, createStorage, replicate } = require('./helpers')
 
 const encryptionKey = b4a.alloc(32, 'hello world')
@@ -132,7 +132,7 @@ test('encrypted session', async function (t) {
 test('encrypted session before ready core', async function (t) {
   const storage = await createStorage(t)
 
-  const a = new Hypercore(storage, { encryption: { key: encryptionKey } })
+  const a = new Spacecore(storage, { encryption: { key: encryptionKey } })
   const s = a.session()
 
   await a.ready()
@@ -197,7 +197,7 @@ test('multiple gets to replicated, encrypted block', async function (t) {
 
 test('encrypted core from existing unencrypted core', async function (t) {
   const a = await create(t, { encryptionKey: null })
-  const b = new Hypercore({ core: a.core, encryption: { key: encryptionKey } })
+  const b = new Spacecore({ core: a.core, encryption: { key: encryptionKey } })
 
   t.alike(b.key, a.key)
   t.alike(b.encryptionKey, encryptionKey)
@@ -213,8 +213,8 @@ test('encrypted core from existing unencrypted core', async function (t) {
 test('from session sessions pass encryption', async function (t) {
   const storage = await createStorage(t)
 
-  const a = new Hypercore(storage)
-  const b = new Hypercore({ core: a.core, encryption: { key: encryptionKey } })
+  const a = new Spacecore(storage)
+  const b = new Spacecore({ core: a.core, encryption: { key: encryptionKey } })
   const c = b.session()
 
   await a.ready()
@@ -233,7 +233,7 @@ test('from session sessions pass encryption', async function (t) {
 test('session keeps encryption', async function (t) {
   const storage = await createStorage(t)
 
-  const a = new Hypercore(storage)
+  const a = new Spacecore(storage)
   const b = a.session({ encryption: { key: encryptionKey } })
   await b.ready()
 

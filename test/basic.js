@@ -1,9 +1,9 @@
 const test = require('brittle')
 const b4a = require('b4a')
 const createTempDir = require('test-tmp')
-const HypercoreStorage = require('hypercore-storage')
+const SpacecoreStorage = require('../../spacecore-storage')
 
-const Hypercore = require('../')
+const Spacecore = require('../')
 const { create, createStorage, eventFlush } = require('./helpers')
 
 test('basic', async function (t) {
@@ -34,7 +34,7 @@ test('core id', async function (t) {
   const key = b4a.alloc(32).fill('a')
 
   const db = await createStorage(t)
-  const core = new Hypercore(db, key)
+  const core = new Spacecore(db, key)
 
   await core.ready()
   t.is(core.id, 'cfosnambcfosnambcfosnambcfosnambcfosnambcfosnambcfoo')
@@ -46,7 +46,7 @@ test('session id', async function (t) {
   const key = b4a.alloc(32).fill('a')
 
   const db = await createStorage(t)
-  const core = new Hypercore(db, key)
+  const core = new Spacecore(db, key)
 
   const session = core.session()
 
@@ -103,7 +103,7 @@ test('close multiple', async function (t) {
 
 test('storage options', async function (t) {
   const db = await createStorage(t)
-  const core = new Hypercore({ storage: db })
+  const core = new Spacecore({ storage: db })
   await core.append('hello')
   t.alike(await core.get(0), b4a.from('hello'))
 
@@ -112,7 +112,7 @@ test('storage options', async function (t) {
 
 test('createIfMissing', async function (t) {
   const db = await createStorage(t)
-  const core = new Hypercore(db, { createIfMissing: false })
+  const core = new Spacecore(db, { createIfMissing: false })
 
   await t.exception(core.ready())
   await db.close()
@@ -121,7 +121,7 @@ test('createIfMissing', async function (t) {
 test('reopen writable core', async function (t) {
   const dir = await createTempDir(t)
 
-  const core = new Hypercore(dir)
+  const core = new Spacecore(dir)
   await core.ready()
 
   let appends = 0
@@ -145,7 +145,7 @@ test('reopen writable core', async function (t) {
 
   await core.close()
 
-  const core2 = new Hypercore(dir)
+  const core2 = new Spacecore(dir)
   await core2.ready()
 
   t.is(core2.length, 2)
@@ -169,19 +169,19 @@ test('reopen and overwrite', async function (t) {
   const dir = await createTempDir()
   let storage = null
 
-  const core = new Hypercore(await open())
+  const core = new Spacecore(await open())
 
   await core.ready()
   await core.close()
   const key = core.key
 
-  const reopen = new Hypercore(await open())
+  const reopen = new Spacecore(await open())
 
   await reopen.ready()
   t.alike(reopen.key, key, 'reopened the core')
   await reopen.close()
 
-  const overwritten = new Hypercore(await open(), { overwrite: true })
+  const overwritten = new Spacecore(await open(), { overwrite: true })
 
   await overwritten.ready()
   t.unlike(overwritten.key, key, 'overwrote the core')
@@ -198,7 +198,7 @@ test('reopen and overwrite', async function (t) {
 test('truncate event has truncated-length and fork', async function (t) {
   t.plan(2)
 
-  const core = new Hypercore(await createStorage(t))
+  const core = new Spacecore(await createStorage(t))
 
   core.on('truncate', function (length, fork) {
     t.is(length, 2)
@@ -211,7 +211,7 @@ test('truncate event has truncated-length and fork', async function (t) {
 })
 
 test('treeHash gets the tree hash at a given core length', async function (t) {
-  const core = new Hypercore(await createStorage(t))
+  const core = new Spacecore(await createStorage(t))
   await core.ready()
 
   const { core: { state } } = core
@@ -231,8 +231,8 @@ test('treeHash gets the tree hash at a given core length', async function (t) {
 })
 
 test('treeHash with default length', async function (t) {
-  const core = new Hypercore(await createStorage(t))
-  const core2 = new Hypercore(await createStorage(t))
+  const core = new Spacecore(await createStorage(t))
+  const core2 = new Spacecore(await createStorage(t))
   await core.ready()
   await core2.ready()
 
@@ -247,7 +247,7 @@ test('treeHash with default length', async function (t) {
 })
 
 test('snapshot locks the state', async function (t) {
-  const core = new Hypercore(await createStorage(t))
+  const core = new Spacecore(await createStorage(t))
   await core.ready()
 
   const a = core.snapshot()
@@ -272,7 +272,7 @@ test('snapshot locks the state', async function (t) {
 test('downloading local range', async function (t) {
   t.plan(1)
 
-  const core = new Hypercore(await createStorage(t))
+  const core = new Spacecore(await createStorage(t))
 
   await core.append('a')
 
@@ -290,7 +290,7 @@ test('downloading local range', async function (t) {
 test('read ahead', async function (t) {
   t.plan(1)
 
-  const core = new Hypercore(await createStorage(t), { valueEncoding: 'utf-8' })
+  const core = new Spacecore(await createStorage(t), { valueEncoding: 'utf-8' })
 
   await core.append('a')
 
@@ -308,7 +308,7 @@ test('read ahead', async function (t) {
 test('defaults for wait', async function (t) {
   t.plan(5)
 
-  const core = new Hypercore(await createStorage(t), b4a.alloc(32), { valueEncoding: 'utf-8' })
+  const core = new Spacecore(await createStorage(t), b4a.alloc(32), { valueEncoding: 'utf-8' })
 
   const a = core.get(1)
 
@@ -417,10 +417,10 @@ test('key is set sync', async function (t) {
   const dir3 = await createStorage(t)
   const dir4 = await createStorage(t)
 
-  const core1 = new Hypercore(dir1, key)
-  const core2 = new Hypercore(dir2)
-  const core3 = new Hypercore(dir3, { key })
-  const core4 = new Hypercore(dir4, { })
+  const core1 = new Spacecore(dir1, key)
+  const core2 = new Spacecore(dir2)
+  const core3 = new Spacecore(dir3, { key })
+  const core4 = new Spacecore(dir4, { })
 
   // flush all db ops before teardown
   t.teardown(() => core1.close())
@@ -437,7 +437,7 @@ test('key is set sync', async function (t) {
 test('disable writable option', async function (t) {
   t.plan(2)
 
-  const core = new Hypercore(await createStorage(t), { writable: false })
+  const core = new Spacecore(await createStorage(t), { writable: false })
   await core.ready()
 
   t.is(core.writable, false)
@@ -455,7 +455,7 @@ test('disable writable option', async function (t) {
 test('disable session writable option', async function (t) {
   t.plan(3)
 
-  const core = new Hypercore(await createStorage(t))
+  const core = new Spacecore(await createStorage(t))
   await core.ready()
 
   const session = core.session({ writable: false })
@@ -479,7 +479,7 @@ test('disable session writable option', async function (t) {
 test('session of a session with the writable option disabled', async function (t) {
   t.plan(1)
 
-  const core = new Hypercore(await createStorage(t))
+  const core = new Spacecore(await createStorage(t))
   const s1 = core.session({ writable: false })
   const s2 = s1.session()
 
@@ -498,10 +498,10 @@ test('session of a session with the writable option disabled', async function (t
 test('writable session on a readable only core', async function (t) {
   t.plan(2)
 
-  const core = new Hypercore(await createStorage(t))
+  const core = new Spacecore(await createStorage(t))
   await core.ready()
 
-  const a = new Hypercore(await createStorage(t), core.key)
+  const a = new Spacecore(await createStorage(t), core.key)
   const s = a.session({ writable: true })
   await s.ready()
   t.is(s.writable, false)
@@ -521,16 +521,16 @@ test('writable session on a readable only core', async function (t) {
 test('append above the max suggested block size', async function (t) {
   t.plan(1)
 
-  const core = new Hypercore(await createStorage(t))
+  const core = new Spacecore(await createStorage(t))
 
   try {
-    await core.append(Buffer.alloc(Hypercore.MAX_SUGGESTED_BLOCK_SIZE))
+    await core.append(Buffer.alloc(Spacecore.MAX_SUGGESTED_BLOCK_SIZE))
   } catch (e) {
     t.fail('should not throw')
   }
 
   try {
-    await core.append(Buffer.alloc(Hypercore.MAX_SUGGESTED_BLOCK_SIZE + 1))
+    await core.append(Buffer.alloc(Spacecore.MAX_SUGGESTED_BLOCK_SIZE + 1))
   } catch {
     t.pass('should throw')
   }
@@ -541,7 +541,7 @@ test('append above the max suggested block size', async function (t) {
 test('get undefined block is not allowed', async function (t) {
   t.plan(1)
 
-  const core = new Hypercore(await createStorage(t))
+  const core = new Spacecore(await createStorage(t))
 
   try {
     await core.get(undefined)
@@ -556,7 +556,7 @@ test('get undefined block is not allowed', async function (t) {
 test('valid manifest passed to a session is stored', async function (t) {
   t.plan(1)
 
-  const core = new Hypercore(await createStorage(t), {
+  const core = new Spacecore(await createStorage(t), {
     manifest: {
       prologue: {
         hash: b4a.alloc(32),
@@ -568,8 +568,8 @@ test('valid manifest passed to a session is stored', async function (t) {
 
   await core.ready()
 
-  const a = new Hypercore(await createStorage(t), core.key)
-  const b = new Hypercore(null, core.key, { manifest: core.manifest, core: a.core })
+  const a = new Spacecore(await createStorage(t), core.key)
+  const b = new Spacecore(null, core.key, { manifest: core.manifest, core: a.core })
 
   await b.ready()
 
@@ -581,7 +581,7 @@ test('valid manifest passed to a session is stored', async function (t) {
 })
 
 test('exclusive sessions', async function (t) {
-  const core = new Hypercore(await createStorage(t))
+  const core = new Spacecore(await createStorage(t))
 
   const a = core.session({ exclusive: true })
   await a.ready()
@@ -599,8 +599,8 @@ test('exclusive sessions', async function (t) {
 test('truncate has correct storage state in memory and persisted', async function (t) {
   const tmpDir = await t.tmp()
   {
-    const storage = new HypercoreStorage(tmpDir)
-    const core = new Hypercore(storage)
+    const storage = new SpacecoreStorage(tmpDir)
+    const core = new Spacecore(storage)
     await core.append(['a', 'b', 'c', 'd', 'e'])
     await core.truncate(2)
     t.alike(getBitfields(core, 0, 5), [true, true, false, false, false])
@@ -611,8 +611,8 @@ test('truncate has correct storage state in memory and persisted', async functio
   }
 
   {
-    const storage = new HypercoreStorage(tmpDir)
-    const core = new Hypercore(storage)
+    const storage = new SpacecoreStorage(tmpDir)
+    const core = new Spacecore(storage)
     await core.ready()
     t.alike(getBitfields(core, 0, 5), [true, true, false, false, false])
     t.is(core.contiguousLength, 2)
@@ -625,8 +625,8 @@ test('truncate has correct storage state in memory and persisted', async functio
 test('clear has correct storage state in memory and persisted', async function (t) {
   const tmpDir = await t.tmp()
   {
-    const storage = new HypercoreStorage(tmpDir)
-    const core = new Hypercore(storage)
+    const storage = new SpacecoreStorage(tmpDir)
+    const core = new Spacecore(storage)
     await core.append(['a', 'b', 'c', 'd', 'e'])
     await core.clear(2)
     t.alike(getBitfields(core, 0, 5), [true, true, false, true, true])
@@ -637,8 +637,8 @@ test('clear has correct storage state in memory and persisted', async function (
   }
 
   {
-    const storage = new HypercoreStorage(tmpDir)
-    const core = new Hypercore(storage)
+    const storage = new SpacecoreStorage(tmpDir)
+    const core = new Spacecore(storage)
     await core.ready()
     t.alike(getBitfields(core, 0, 5), [true, true, false, true, true])
     t.is(core.contiguousLength, 2)
@@ -656,8 +656,8 @@ test('append alignment to bitfield boundary', async function (t) {
   expectedBitfields.push(false)
 
   {
-    const storage = new HypercoreStorage(tmpDir)
-    const core = new Hypercore(storage)
+    const storage = new SpacecoreStorage(tmpDir)
+    const core = new Spacecore(storage)
     await core.ready()
 
     const b = []
@@ -675,8 +675,8 @@ test('append alignment to bitfield boundary', async function (t) {
   }
 
   {
-    const storage = new HypercoreStorage(tmpDir)
-    const core = new Hypercore(storage)
+    const storage = new SpacecoreStorage(tmpDir)
+    const core = new Spacecore(storage)
     await core.ready()
 
     t.alike(getBitfields(core, 0, 32769), expectedBitfields)
@@ -687,19 +687,19 @@ test('append alignment to bitfield boundary', async function (t) {
   }
 })
 
-function getBitfields (hypercore, start = 0, end = null) {
-  if (!end) end = hypercore.length
+function getBitfields (spacecore, start = 0, end = null) {
+  if (!end) end = spacecore.length
 
   const res = []
   for (let i = start; i < end; i++) {
-    res.push(hypercore.core.bitfield.get(i))
+    res.push(spacecore.core.bitfield.get(i))
   }
 
   return res
 }
 
-async function getContiguousLengthInStorage (hypercore) {
-  const storageRx = hypercore.core.storage.read()
+async function getContiguousLengthInStorage (spacecore) {
+  const storageRx = spacecore.core.storage.read()
   const [res] = await Promise.all([storageRx.getHints(), storageRx.tryFlush()])
   return res?.contiguousLength || null
 }

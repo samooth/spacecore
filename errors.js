@@ -1,2 +1,2 @@
-// explicitly exposed as hypercore/errors
-module.exports = require('hypercore-errors')
+// explicitly exposed as spacecore/errors
+module.exports = require('../spacecore-errors')

@@ -1,7 +1,7 @@
-const Hypercore = require('../')
-const Hyperswarm = require('hyperswarm')
+const Spacecore = require('../')
+const Spaceswarm = require('../../spaceswarm')
 
-const core = new Hypercore('./source')
+const core = new Spacecore('./source')
 
 start()
 
@@ -11,7 +11,7 @@ async function start () {
     await core.append('block #' + core.length)
   }
 
-  const swarm = new Hyperswarm()
+  const swarm = new Spaceswarm()
   swarm.on('connection', socket => core.replicate(socket))
   swarm.join(core.discoveryKey, { server: true, client: false })
 

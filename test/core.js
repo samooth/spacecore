@@ -1,7 +1,7 @@
 const test = require('brittle')
 const b4a = require('b4a')
 const createTempDir = require('test-tmp')
-const CoreStorage = require('hypercore-storage')
+const CoreStorage = require('../../spacecore-storage')
 const { MerkleTree } = require('../lib/merkle-tree')
 const Core = require('../lib/core')
 

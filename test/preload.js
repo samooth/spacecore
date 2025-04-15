@@ -1,6 +1,6 @@
-const crypto = require('hypercore-crypto')
+const crypto = require('spacecore-crypto')
 const test = require('brittle')
-const Hypercore = require('../')
+const Spacecore = require('../')
 const { createStorage } = require('./helpers')
 
 test('preload - custom keypair', async function (t) {
@@ -11,7 +11,7 @@ test('preload - custom keypair', async function (t) {
     resolve({ keyPair })
   })
 
-  const core = new Hypercore(storage, keyPair.publicKey, { preload })
+  const core = new Spacecore(storage, keyPair.publicKey, { preload })
   await core.ready()
 
   t.ok(core.writable)

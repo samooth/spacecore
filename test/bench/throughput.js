@@ -2,12 +2,12 @@ const test = require('brittle')
 const tmp = require('test-tmp')
 const b4a = require('b4a')
 const { create, replicate } = require('../helpers')
-const Hypercore = require('../../index.js')
+const Spacecore = require('../../index.js')
 
 test('throughput from disk', async function (t) {
   const dir = await tmp(t)
 
-  const a = new Hypercore(dir)
+  const a = new Spacecore(dir)
   await a.append(new Array(20000).fill().map(() => b4a.alloc(1)))
 
   const b = await create(a.key)

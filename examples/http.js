@@ -1,6 +1,6 @@
 const http = require('http')
-const Hypercore = require('../')
-const Hyperswarm = require('hyperswarm')
+const Spacecore = require('../')
+const Spaceswarm = require('../../spaceswarm')
 const rangeParser = require('range-parser')
 
 // Convert video into a core: node http.js import ./joker-scene.mp4
@@ -8,7 +8,7 @@ const rangeParser = require('range-parser')
 // Other peers: node http.js <core key>
 
 const key = process.argv[2] && process.argv[2] !== 'import' ? Buffer.from(process.argv[2], 'hex') : null
-const core = new Hypercore('/tmp/movie' + (key ? '-peer' : ''), key)
+const core = new Spacecore('/tmp/movie' + (key ? '-peer' : ''), key)
 
 if (process.argv[2] === 'import') importData(process.argv[3])
 else start()
@@ -19,7 +19,7 @@ async function start () {
 
   core.on('download', (index) => console.log('Downloaded block #' + index))
 
-  const swarm = new Hyperswarm()
+  const swarm = new Spaceswarm()
   swarm.on('connection', (socket) => core.replicate(socket))
   const discovery = swarm.join(core.discoveryKey)
 

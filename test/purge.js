@@ -3,11 +3,11 @@ const tmp = require('test-tmp')
 const fs = require('fs')
 const Path = require('path')
 
-const Hypercore = require('..')
+const Spacecore = require('..')
 
 test('basic purge', async function (t) {
   const dir = await tmp(t)
-  const core = new Hypercore(dir)
+  const core = new Spacecore(dir)
   await core.append(['a', 'b', 'c'])
 
   const oplogLoc = Path.join(dir, 'oplog')
@@ -33,7 +33,7 @@ test('basic purge', async function (t) {
 
 test('purge closes all sessions', async function (t) {
   const dir = await tmp(t)
-  const core = new Hypercore(dir)
+  const core = new Spacecore(dir)
   await core.append(['a', 'b', 'c'])
   const otherSession = core.session()
   await otherSession.ready()

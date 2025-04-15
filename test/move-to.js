@@ -1,6 +1,6 @@
 const test = require('brittle')
 const b4a = require('b4a')
-const crypto = require('hypercore-crypto')
+const crypto = require('spacecore-crypto')
 const { create } = require('./helpers')
 
 test('move - basic', async function (t) {

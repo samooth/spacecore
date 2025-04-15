@@ -1,10 +1,10 @@
 const test = require('brittle')
-const crypto = require('hypercore-crypto')
+const crypto = require('../../spacecore-crypto')
 const b4a = require('b4a')
 const tmpDir = require('test-tmp')
 const c = require('compact-encoding')
 
-const Hypercore = require('../')
+const Spacecore = require('../')
 const Verifier = require('../lib/verifier')
 const { assemble, partialSignature, signableLength } = require('../lib/multisig')
 const { MerkleTree } = require('../lib/merkle-tree')
@@ -194,7 +194,7 @@ test('create verifier - defaults', async function (t) {
 
   const verifier = Verifier.fromManifest(manifest)
 
-  t.alike(Hypercore.key(manifest), Hypercore.key(keyPair.publicKey))
+  t.alike(Spacecore.key(manifest), Spacecore.key(keyPair.publicKey))
 
   const batch = new AssertionTreeBatch(null, b4a.alloc(32, 1))
   const signature = verifier.sign(batch, keyPair)
@@ -267,7 +267,7 @@ test('multisig - append', async function (t) {
 
   const core = await create(t, { manifest })
 
-  t.alike(Hypercore.key(manifest), core.key)
+  t.alike(Spacecore.key(manifest), core.key)
 
   await signers[0].append(b4a.from('0'))
   await signers[1].append(b4a.from('0'))
@@ -331,7 +331,7 @@ test('multisig - batch failed', async function (t) {
 
   const core = await create(t, { manifest })
 
-  t.alike(Hypercore.key(manifest), core.key)
+  t.alike(Spacecore.key(manifest), core.key)
 
   await signers[0].append(b4a.from('0'))
   await signers[1].append(b4a.from('0'))
@@ -508,7 +508,7 @@ test('multisig - batch append with patches', async function (t) {
   let multisig = null
   const core = await create(t, { manifest })
 
-  t.alike(Hypercore.key(manifest), core.key)
+  t.alike(Spacecore.key(manifest), core.key)
 
   await signers[0].append(b4a.from('0'))
   await signers[0].append(b4a.from('1'))
@@ -721,7 +721,7 @@ test('multisig - persist to disk', async function (t) {
 
   let multisig = null
 
-  const core = new Hypercore(storage, { manifest })
+  const core = new Spacecore(storage, { manifest })
   await core.ready()
 
   await signers[0].append(b4a.from('0'))
@@ -743,7 +743,7 @@ test('multisig - persist to disk', async function (t) {
   await core.close()
   await storage.close()
 
-  const reopened = new Hypercore(await createStorage(t, dir), { manifest })
+  const reopened = new Spacecore(await createStorage(t, dir), { manifest })
   await t.execution(reopened.ready())
 
   const core2 = await create(t, { manifest })

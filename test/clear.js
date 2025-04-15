@@ -1,10 +1,10 @@
 const test = require('brittle')
 const tmp = require('test-tmp')
 const b4a = require('b4a')
-const CoreStorage = require('hypercore-storage')
+const CoreStorage = require('../../spacecore-storage')
 const { create, createStorage, replicate, eventFlush } = require('./helpers')
 
-const Hypercore = require('../')
+const Spacecore = require('../')
 
 test('clear', async function (t) {
   const a = await create(t)
@@ -90,7 +90,7 @@ test('incorrect clear', async function (t) {
 
 test('clear blocks with diff option', async function (t) {
   const storage = await createStorage(t)
-  const core = new Hypercore(storage)
+  const core = new Spacecore(storage)
   await core.append(b4a.alloc(128))
 
   const cleared = await core.clear(1337)
@@ -111,10 +111,10 @@ test('clear - no side effect from clearing unknown nodes', async function (t) {
   const storageWriter = await tmp(t)
   const storageReader = await tmp(t)
 
-  const writer1 = new Hypercore(storageWriter)
+  const writer1 = new Spacecore(storageWriter)
   await writer1.append(['a', 'b', 'c', 'd']) // => 'Error: Could not load node: 1'
 
-  const clone = new Hypercore(storageReader, writer1.key)
+  const clone = new Spacecore(storageReader, writer1.key)
   await clone.ready()
 
   // Needs replicate and the three clears for error to happen
@@ -134,7 +134,7 @@ test('clear - large cores', async function (t) {
   const dir = await t.tmp()
 
   const db = new CoreStorage(dir)
-  const a = new Hypercore(db)
+  const a = new Spacecore(db)
   await a.ready()
   t.teardown(() => a.close(), { order: 1 })
 
@@ -158,7 +158,7 @@ test('clear - large cores', async function (t) {
   t.is(b4a.toString(await a.get(1000)), 'Block-1000')
   {
     const storageBlocks = await consumeStream(a.state.storage.createBlockStream({ gte: 99, lte: 1000 }))
-    t.alike(storageBlocks.map(b => b.index), [99, 1000], 'correct state in hypercore storage')
+    t.alike(storageBlocks.map(b => b.index), [99, 1000], 'correct state in spacecore storage')
   }
 
   t.is(b4a.toString(await a.get(2 ** 16 - 11)), 'Block-65525')
@@ -167,7 +167,7 @@ test('clear - large cores', async function (t) {
   t.is(b4a.toString(await a.get(2 ** 16 + 10)), 'Block-65546')
   {
     const storageBlocks = await consumeStream(a.state.storage.createBlockStream({ gte: 2 ** 16 - 11, lte: 2 ** 16 + 10 }))
-    t.alike(storageBlocks.map(b => b.index), [65525, 65546], 'correct state in hypercore storage')
+    t.alike(storageBlocks.map(b => b.index), [65525, 65546], 'correct state in spacecore storage')
   }
 
   t.is(b4a.toString(await a.get(290000 - 1)), 'Block-289999')
@@ -176,7 +176,7 @@ test('clear - large cores', async function (t) {
   t.is(b4a.toString(await a.get(299998)), 'Block-299998')
   {
     const storageBlocks = await consumeStream(a.state.storage.createBlockStream({ gte: 289999, lte: 299998 }))
-    t.alike(storageBlocks.map(b => b.index), [289999, 299998], 'correct state in hypercore storage')
+    t.alike(storageBlocks.map(b => b.index), [289999, 299998], 'correct state in spacecore storage')
   }
 })
 

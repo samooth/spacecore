@@ -1,13 +1,13 @@
 const test = require('brittle')
 const { create, createStorage } = require('./helpers')
-const Hypercore = require('../')
+const Spacecore = require('../')
 const b4a = require('b4a')
 
 test('core and session timeout property', async function (t) {
   t.plan(3)
 
   const storage = await createStorage(t)
-  const core = new Hypercore(storage)
+  const core = new Spacecore(storage)
   t.is(core.timeout, 0)
 
   const a = core.session()
@@ -27,7 +27,7 @@ test('core session inherits timeout property', async function (t) {
   t.plan(3)
 
   const storage = await createStorage(t)
-  const core = new Hypercore(storage, { timeout: 50 })
+  const core = new Spacecore(storage, { timeout: 50 })
   t.is(core.timeout, 50)
 
   const a = core.session()

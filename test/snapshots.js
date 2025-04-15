@@ -1,7 +1,7 @@
 const test = require('brittle')
 const createTempDir = require('test-tmp')
 const b4a = require('b4a')
-const Hypercore = require('../')
+const Spacecore = require('../')
 const { replicate, unreplicate, create, createStorage } = require('./helpers')
 
 test('snapshot does not change when original gets modified', async function (t) {
@@ -106,7 +106,7 @@ test('snapshots wait for ready', async function (t) {
   const dir = await createTempDir(t)
   const db = await createStorage(t, dir)
 
-  const core = new Hypercore(db)
+  const core = new Spacecore(db)
   await core.ready()
 
   const s1 = core.snapshot()
@@ -133,7 +133,7 @@ test('snapshots wait for ready', async function (t) {
   await db.close()
 
   const db2 = await createStorage(t, dir)
-  const coreCopy = new Hypercore(db2)
+  const coreCopy = new Spacecore(db2)
 
   // if a snapshot is made on an opening core, it should wait until opened
   const s3 = coreCopy.snapshot()

@@ -1,9 +1,9 @@
 const test = require('brittle')
 const b4a = require('b4a')
-const NoiseSecretStream = require('@hyperswarm/secret-stream')
+const NoiseSecretStream = require('../../spaceswarm-secret-stream')
 const { create, createStored, replicate, unreplicate, eventFlush, replicateDebugStream } = require('./helpers')
 const { makeStreamPair } = require('./helpers/networking.js')
-const Hypercore = require('../')
+const Spacecore = require('../')
 
 const DEBUG = false
 
@@ -464,12 +464,12 @@ test('multiplexing with createProtocolStream (ondiscoverykey is not called)', as
   const n2 = new NoiseSecretStream(false)
   n1.rawStream.pipe(n2.rawStream).pipe(n1.rawStream)
 
-  const stream1 = Hypercore.createProtocolStream(n1, {
+  const stream1 = Spacecore.createProtocolStream(n1, {
     ondiscoverykey: function (discoveryKey) {
       t.fail()
     }
   })
-  const stream2 = Hypercore.createProtocolStream(n2, {
+  const stream2 = Spacecore.createProtocolStream(n2, {
     ondiscoverykey: function (discoveryKey) {
       t.fail()
     }
@@ -505,7 +505,7 @@ test('multiplexing with createProtocolStream (ondiscoverykey is called)', async 
   const n2 = new NoiseSecretStream(false)
   n1.rawStream.pipe(n2.rawStream).pipe(n1.rawStream)
 
-  const stream1 = Hypercore.createProtocolStream(n1, {
+  const stream1 = Spacecore.createProtocolStream(n1, {
     ondiscoverykey: function (discoveryKey) {
       if (b4a.equals(a1.discoveryKey, discoveryKey)) {
         a1.replicate(stream1, { keepAlive: false })
@@ -518,7 +518,7 @@ test('multiplexing with createProtocolStream (ondiscoverykey is called)', async 
       }
     }
   })
-  const stream2 = Hypercore.createProtocolStream(n2, {
+  const stream2 = Spacecore.createProtocolStream(n2, {
     ondiscoverykey: function (discoveryKey) {
       t.fail()
     }

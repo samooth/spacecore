@@ -1,7 +1,7 @@
 const test = require('brittle')
 const b4a = require('b4a')
 
-const Hypercore = require('../')
+const Spacecore = require('../')
 const { create, createStorage } = require('./helpers')
 
 test('atomic - session', async function (t) {
@@ -300,8 +300,8 @@ test('atomic - append and user data', async function (t) {
 test('atomic - overwrite and user data', async function (t) {
   const storage = await createStorage(t)
 
-  const core = new Hypercore(storage)
-  const core2 = new Hypercore(storage)
+  const core = new Spacecore(storage)
+  const core2 = new Spacecore(storage)
 
   await core.ready()
   await core2.ready()

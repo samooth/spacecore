@@ -2,7 +2,7 @@ const test = require('brittle')
 const createTempDir = require('test-tmp')
 const b4a = require('b4a')
 
-const Hypercore = require('../')
+const Spacecore = require('../')
 const { create, createStorage, replicate } = require('./helpers')
 
 test('batch append', async function (t) {
@@ -449,7 +449,7 @@ test('persistent batch', async function (t) {
   const dir = await createTempDir()
   let storage = null
 
-  const core = new Hypercore(await open())
+  const core = new Spacecore(await open())
   await core.ready()
 
   await core.append(['a', 'b', 'c'])
@@ -466,7 +466,7 @@ test('persistent batch', async function (t) {
 
   await core.close()
 
-  const reopen = new Hypercore(await open())
+  const reopen = new Spacecore(await open())
   await reopen.ready()
 
   const reopened = reopen.session({ name: 'batch' })
@@ -546,7 +546,7 @@ test('batch append with huge batch', async function (t) {
 test('batch does not append but reopens', async function (t) {
   const dir = await createTempDir(t)
 
-  let core = new Hypercore(dir)
+  let core = new Spacecore(dir)
 
   await core.append('hello')
 
@@ -558,7 +558,7 @@ test('batch does not append but reopens', async function (t) {
 
   await core.close()
 
-  core = new Hypercore(dir)
+  core = new Spacecore(dir)
 
   await core.append('hello')
 
@@ -573,10 +573,10 @@ test('batch does not append but reopens', async function (t) {
 })
 
 test('batch commit under replication', async function (t) {
-  const core = new Hypercore(await t.tmp())
+  const core = new Spacecore(await t.tmp())
   await core.ready()
 
-  const clone = new Hypercore(await t.tmp(), core.key)
+  const clone = new Spacecore(await t.tmp(), core.key)
 
   const batch = clone.session({ name: 'batch' })
   await batch.ready()

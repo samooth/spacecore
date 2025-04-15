@@ -1,13 +1,13 @@
-// Generate an ABI snapshot for the current version of Hypercore.
+// Generate an ABI snapshot for the current version of Spacecore.
 
 const path = require('path')
-const crypto = require('hypercore-crypto')
+const crypto = require('spacecore-crypto')
 const b4a = require('b4a')
-const Hypercore = require('../../../')
+const Spacecore = require('../../../')
 
 const { version } = require('../../../package.json')
 
-const core = new Hypercore(path.join(__dirname, `v${version}`), {
+const core = new Spacecore(path.join(__dirname, `v${version}`), {
   keyPair: crypto.keyPair() // Use an ephemeral key pair
 })
 

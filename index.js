@@ -1,12 +1,12 @@
 const { EventEmitter } = require('events')
 const isOptions = require('is-options')
-const crypto = require('hypercore-crypto')
-const CoreStorage = require('hypercore-storage')
+const crypto = require('spacecore-crypto')
+const CoreStorage = require('../spacecore-storage')
 const c = require('compact-encoding')
 const b4a = require('b4a')
-const NoiseSecretStream = require('@hyperswarm/secret-stream')
+const NoiseSecretStream = require('spaceswarm-secret-stream')
 const Protomux = require('protomux')
-const id = require('hypercore-id-encoding')
+const id = require('../spacecore-id-encoding')
 const safetyCatch = require('safety-catch')
 const unslab = require('unslab')
 
@@ -26,15 +26,15 @@ const {
   SESSION_NOT_WRITABLE,
   SNAPSHOT_NOT_AVAILABLE,
   DECODING_ERROR
-} = require('hypercore-errors')
+} = require('spacecore-errors')
 
 const inspect = Symbol.for('nodejs.util.inspect.custom')
 
-// Hypercore actually does not have any notion of max/min block sizes
+// Spacecore actually does not have any notion of max/min block sizes
 // but we enforce 15mb to ensure smooth replication (each block is transmitted atomically)
 const MAX_SUGGESTED_BLOCK_SIZE = 15 * 1024 * 1024
 
-class Hypercore extends EventEmitter {
+class Spacecore extends EventEmitter {
   constructor (storage, key, opts) {
     super()
 
@@ -157,7 +157,7 @@ class Hypercore extends EventEmitter {
   }
 
   static createCore (storage, opts) {
-    return new Core(Hypercore.defaultStorage(storage), { autoClose: false, ...opts })
+    return new Core(Spacecore.defaultStorage(storage), { autoClose: false, ...opts })
   }
 
   static createProtocolStream (isInitiator, opts = {}) {
@@ -187,7 +187,7 @@ class Hypercore extends EventEmitter {
     }
 
     if (opts.ondiscoverykey) {
-      noiseStream.userData.pair({ protocol: 'hypercore/alpha' }, opts.ondiscoverykey)
+      noiseStream.userData.pair({ protocol: 'spacecore/alpha' }, opts.ondiscoverykey)
     }
 
     return outerStream
@@ -219,7 +219,7 @@ class Hypercore extends EventEmitter {
     const onwait = opts.onwait === undefined ? this.onwait : opts.onwait
     const timeout = opts.timeout === undefined ? this.timeout : opts.timeout
     const weak = opts.weak === undefined ? this.weak : opts.weak
-    const Clz = opts.class || Hypercore
+    const Clz = opts.class || Spacecore
     const s = new Clz(null, this.key, {
       ...opts,
       wait,
@@ -501,7 +501,7 @@ class Hypercore extends EventEmitter {
     // if same stream is passed twice, ignore the 2nd one before we make sessions etc
     if (isStream(isInitiator) && this._isAttached(isInitiator)) return isInitiator
 
-    const protocolStream = Hypercore.createProtocolStream(isInitiator, opts)
+    const protocolStream = Spacecore.createProtocolStream(isInitiator, opts)
     const noiseStream = protocolStream.noiseStream
     const protocol = noiseStream.userData
 
@@ -1042,7 +1042,7 @@ class Hypercore extends EventEmitter {
   }
 }
 
-module.exports = Hypercore
+module.exports = Spacecore
 
 function isStream (s) {
   return typeof s === 'object' && s && typeof s.pipe === 'function'
@@ -1086,7 +1086,7 @@ function initOnce (session, storage, key, opts) {
   if (storage === null) storage = opts.storage || null
   if (key === null) key = opts.key || null
 
-  session.core = new Core(Hypercore.defaultStorage(storage), {
+  session.core = new Core(Spacecore.defaultStorage(storage), {
     preopen: opts.preopen,
     eagerUpgrade: true,
     notDownloadingLinger: opts.notDownloadingLinger,

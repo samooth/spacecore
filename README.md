@@ -1,8 +1,8 @@
-# Hypercore
+# space-core
 
-### [See the full API docs at docs.pears.com](https://docs.pears.com/building-blocks/hypercore)
+### [See the full API docs at docs.pears.com](https://docs.space.bsv.direct/building-blocks/bitspacecore)
 
-Hypercore is a secure, distributed append-only log.
+BitSpacecore is a secure, distributed append-only log.
 
 Built for sharing large datasets and streams of real time data
 
@@ -12,44 +12,44 @@ Built for sharing large datasets and streams of real time data
 * **Realtime.** Get the latest updates to the log fast and securely.
 * **Performant.** Uses a simple flat file structure to maximize I/O performance.
 * **Secure.** Uses signed merkle trees to verify log integrity in real time.
-* **Modular.** Hypercore aims to do one thing and one thing well - distributing a stream of data.
+* **Modular.** Spacecore aims to do one thing and one thing well - distributing a stream of data.
 
-Note that the latest release is Hypercore 10, which adds support for truncate and many other things.
+Note that the latest release is Spacecore 10, which adds support for truncate and many other things.
 Version 10 is not compatible with earlier versions (9 and earlier), but is considered LTS, meaning the storage format and wire protocol is forward compatible with future versions.
 
 ## Install
 
 ```sh
-npm install hypercore
+npm install space-core
 ```
 
 > [!NOTE]
-> This readme reflects Hypercore 11, our latest major version that is backed by RocksDB for storage and atomicity.
-> Whilst we are fully validating that, the npm dist-tag for latest is set to latest version of Hypercore 10, the previous major, to avoid too much disruption.
+> This readme reflects Spacecore 11, our latest major version that is backed by RocksDB for storage and atomicity.
+> Whilst we are fully validating that, the npm dist-tag for latest is set to latest version of Spacecore 10, the previous major, to avoid too much disruption.
 > It will be updated to 11 in a few weeks.
 
 ## API
 
-#### `const core = new Hypercore(storage, [key], [options])`
+#### `const core = new Spacecore(storage, [key], [options])`
 
-Make a new Hypercore instance.
+Make a new Spacecore instance.
 
 `storage` should be set to a directory where you want to store the data and core metadata.
 
 ``` js
-const core = new Hypercore('./directory') // store data in ./directory
+const core = new Spacecore('./directory') // store data in ./directory
 ```
 
-Alternatively you can pass a [Hypercore Storage](https://github.com/holepunchto/hypercore-storage) or use a [Corestore](https://github.com/holepunchto/corestore) if you want to make many Hypercores efficiently. Note that `random-access-storage` is no longer supported.
+Alternatively you can pass a [Spacecore Storage](https://github.com/samooth/spacecore-storage) or use a [Corestore](https://github.com/samooth/corestore) if you want to make many Spacecores efficiently. Note that `random-access-storage` is no longer supported.
 
-`key` can be set to a Hypercore key which is a hash of Hypercore's internal auth manifest, describing how to validate the Hypercore. If you do not set this, it will be loaded from storage. If nothing is previously stored, a new auth manifest will be generated giving you local write access to it.
+`key` can be set to a Spacecore key which is a hash of Spacecore's internal auth manifest, describing how to validate the Spacecore. If you do not set this, it will be loaded from storage. If nothing is previously stored, a new auth manifest will be generated giving you local write access to it.
 
 `options` include:
 
 ``` js
 {
-  createIfMissing: true, // create a new Hypercore key pair if none was present in storage
-  overwrite: false, // overwrite any old Hypercore that might already exist
+  createIfMissing: true, // create a new Spacecore key pair if none was present in storage
+  overwrite: false, // overwrite any old Spacecore that might already exist
   valueEncoding: 'json' | 'utf-8' | 'binary', // defaults to binary
   encodeBatch: batch => { ... }, // optionally apply an encoding to complete batches
   keyPair: kp, // optionally pass the public key and secret key as a key pair
@@ -288,7 +288,7 @@ range.destroy()
 
 #### `const session = core.session([options])`
 
-Creates a new Hypercore instance that shares the same underlying core.
+Creates a new Spacecore instance that shares the same underlying core.
 
 You must close any session you make.
 
@@ -301,15 +301,15 @@ Options are inherited from the parent instance, unless they are re-set.
   weak: false // Creates the session as a "weak ref" which closes when all non-weak sessions are closed
   exclusive: false, // Create a session with exclusive access to the core. Creating an exclusive session on a core with other exclusive sessions, will wait for the session with access to close before the next exclusive session is `ready`
   checkout: undefined, // A index to checkout the core at. Checkout sessions must be an atom or a named session
-  atom: undefined, // A storage atom for making atomic batch changes across hypercores
+  atom: undefined, // A storage atom for making atomic batch changes across spacecores
   name: null, // Name the session creating a persisted branch of the core. Still beta so may break in the future
 }
 ```
 
-Atoms allow making atomic changes across multiple hypercores. Atoms can be created using a `core`'s `storage` (eg. `const atom = core.state.storage.createAtom()`). Changes made with an atom based session is not persisted until the atom is flushed via `await atom.flush()`, but can be read at any time. When atoms flush, all changes made outside of the atom will be clobbered as the core blocks will now match the atom's blocks. For example:
+Atoms allow making atomic changes across multiple spacecores. Atoms can be created using a `core`'s `storage` (eg. `const atom = core.state.storage.createAtom()`). Changes made with an atom based session is not persisted until the atom is flushed via `await atom.flush()`, but can be read at any time. When atoms flush, all changes made outside of the atom will be clobbered as the core blocks will now match the atom's blocks. For example:
 
 ```js
-const core = new Hypercore('./atom-example')
+const core = new Spacecore('./atom-example')
 await core.ready()
 
 await core.append('block 1')
@@ -437,7 +437,7 @@ Populated after `ready` has been emitted. Will be `0` before the event.
 
 #### `core.signedLength`
 
-How many blocks of data are available on this core that have been signed by a quorum. This is equal to `core.length` for Hypercores's with a single signer.
+How many blocks of data are available on this core that have been signed by a quorum. This is equal to `core.length` for Spacecores's with a single signer.
 
 Populated after `ready` has been emitted. Will be `0` before the event.
 
@@ -459,14 +459,14 @@ How much padding is applied to each block of this core? Will be `0` unless block
 
 #### `const stream = core.replicate(isInitiatorOrReplicationStream)`
 
-Create a replication stream. You should pipe this to another Hypercore instance.
+Create a replication stream. You should pipe this to another Spacecore instance.
 
 The `isInitiator` argument is a boolean indicating whether you are the initiator of the connection (ie the client)
 or if you are the passive part (ie the server).
 
-If you are using a P2P swarm like [Hyperswarm](https://github.com/hyperswarm/hyperswarm) you can know this by checking if the swarm connection is a client socket or server socket. In Hyperswarm you can check that using the [client property on the peer details object](https://github.com/hyperswarm/hyperswarm#swarmonconnection-socket-details--)
+If you are using a P2P swarm like [Spaceswarm](https://github.com/spaceswarm/spaceswarm) you can know this by checking if the swarm connection is a client socket or server socket. In Spaceswarm you can check that using the [client property on the peer details object](https://github.com/spaceswarm/spaceswarm#swarmonconnection-socket-details--)
 
-If you want to multiplex the replication over an existing Hypercore replication stream you can pass
+If you want to multiplex the replication over an existing Spacecore replication stream you can pass
 another stream instance instead of the `isInitiator` boolean.
 
 ``` js
@@ -484,8 +484,8 @@ socket.pipe(localCore.replicate(true)).pipe(socket)
 
 #### `const done = core.findingPeers()`
 
-Create a hook that tells Hypercore you are finding peers for this core in the background. Call `done` when your current discovery iteration is done.
-If you're using Hyperswarm, you'd normally call this after a `swarm.flush()` finishes.
+Create a hook that tells Spacecore you are finding peers for this core in the background. Call `done` when your current discovery iteration is done.
+If you're using Spaceswarm, you'd normally call this after a `swarm.flush()` finishes.
 
 This allows `core.update` to wait for either the `findingPeers` hook to finish or one peer to appear before deciding whether it should wait for a merkle tree update before returning.
 

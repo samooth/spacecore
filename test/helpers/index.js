@@ -1,6 +1,6 @@
-const Hypercore = require('../../')
+const Spacecore = require('../../')
 const createTempDir = require('test-tmp')
-const CoreStorage = require('hypercore-storage')
+const CoreStorage = require('../../../spacecore-storage')
 const safetyCatch = require('safety-catch')
 const DebuggingStream = require('debugging-stream')
 
@@ -9,7 +9,7 @@ exports.create = async function (t, ...args) {
 
   const db = new CoreStorage(dir)
 
-  const core = new Hypercore(db, ...args)
+  const core = new Spacecore(db, ...args)
   await core.ready()
 
   t.teardown(() => core.close().catch(safetyCatch), { order: 1 })
@@ -29,7 +29,7 @@ exports.createStored = async function (t) {
   return async function (...args) {
     if (db) await db.close()
     db = await createStorage(t, dir)
-    return new Hypercore(db, ...args)
+    return new Spacecore(db, ...args)
   }
 }
 

@@ -1,2 +1,2 @@
-// explicitly exposed as hypercore/messages
+// explicitly exposed as spacecore/messages
 module.exports = require('./lib/messages')
