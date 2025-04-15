@@ -1,6 +1,6 @@
 const Spacecore = require('../../')
 const createTempDir = require('test-tmp')
-const CoreStorage = require('../../../spacecore-storage')
+const CoreStorage = require('spacecore-storage')
 const safetyCatch = require('safety-catch')
 const DebuggingStream = require('debugging-stream')
 

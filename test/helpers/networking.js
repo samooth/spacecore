@@ -1,6 +1,6 @@
 const UDX = require('udx-native')
 const safetyCatch = require('safety-catch')
-const NoiseStream = require('../../../spaceswarm-secret-stream')
+const NoiseStream = require('spaceswarm-secret-stream')
 
 module.exports = {
   makeStreamPair

@@ -1,7 +1,7 @@
 const { EventEmitter } = require('events')
 const isOptions = require('is-options')
 const crypto = require('spacecore-crypto')
-const CoreStorage = require('../spacecore-storage')
+const CoreStorage = require('spacecore-storage')
 const c = require('compact-encoding')
 const b4a = require('b4a')
 const NoiseSecretStream = require('spaceswarm-secret-stream')

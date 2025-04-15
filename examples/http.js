@@ -1,6 +1,6 @@
 const http = require('http')
 const Spacecore = require('../')
-const Spaceswarm = require('../../spaceswarm')
+const Spaceswarm = require('spaceswarm')
 const rangeParser = require('range-parser')
 
 // Convert video into a core: node http.js import ./joker-scene.mp4

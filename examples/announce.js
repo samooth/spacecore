@@ -1,5 +1,5 @@
 const Spacecore = require('../')
-const Spaceswarm = require('../../spaceswarm')
+const Spaceswarm = require('spaceswarm')
 
 const core = new Spacecore('./source')
 
