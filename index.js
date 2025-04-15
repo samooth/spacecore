@@ -249,7 +249,7 @@ class Spacecore extends EventEmitter {
     }
 
     if (!isEncryptionProvider(encryption)) {
-      throw new Error('Provider does not satisfy HypercoreEncryption interface')
+      throw new Error('Provider does not satisfy SpacecoreEncryption interface')
     }
 
     this.encryption = encryption

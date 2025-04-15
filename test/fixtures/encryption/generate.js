@@ -2,10 +2,10 @@
 
 const fs = require('fs')
 const path = require('path')
-const crypto = require('hypercore-crypto')
+const crypto = require('spacecore-crypto')
 const tmpDir = require('test-tmp')
 
-const Hypercore = require('../../../')
+const Spacecore = require('../../../')
 const { version } = require('../../../package.json')
 
 main()
@@ -19,9 +19,9 @@ async function main () {
 
   const closing = []
 
-  const compat = new Hypercore(await tmpDir({ teardown }), { keyPair: compatKey, encryptionKey, compat: true })
-  const def = new Hypercore(await tmpDir({ teardown }), { keyPair: defaultKey, encryptionKey, isBlockKey: false })
-  const block = new Hypercore(await tmpDir({ teardown }), { keyPair: blockKey, encryptionKey, isBlockKey: true })
+  const compat = new Spacecore(await tmpDir({ teardown }), { keyPair: compatKey, encryptionKey, compat: true })
+  const def = new Spacecore(await tmpDir({ teardown }), { keyPair: defaultKey, encryptionKey, isBlockKey: false })
+  const block = new Spacecore(await tmpDir({ teardown }), { keyPair: blockKey, encryptionKey, isBlockKey: true })
 
   await compat.ready()
   await def.ready()

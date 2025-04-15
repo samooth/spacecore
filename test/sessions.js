@@ -1,6 +1,6 @@
 const uncaughts = require('uncaughts')
 const test = require('brittle')
-const crypto = require('../../spacecore-crypto')
+const crypto = require('spacecore-crypto')
 const c = require('compact-encoding')
 const b4a = require('b4a')
 const { create, createStorage } = require('./helpers')
