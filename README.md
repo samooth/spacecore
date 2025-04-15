@@ -462,7 +462,7 @@ Create a replication stream. You should pipe this to another Spacecore instance.
 The `isInitiator` argument is a boolean indicating whether you are the initiator of the connection (ie the client)
 or if you are the passive part (ie the server).
 
-If you are using a P2P swarm like [Spaceswarm](https://github.com/spaceswarm/spaceswarm) you can know this by checking if the swarm connection is a client socket or server socket. In Spaceswarm you can check that using the [client property on the peer details object](https://github.com/spaceswarm/spaceswarm#swarmonconnection-socket-details--)
+If you are using a P2P swarm like [Spaceswarm](https://github.com/samooth/spaceswarm) you can know this by checking if the swarm connection is a client socket or server socket. In Spaceswarm you can check that using the [client property on the peer details object](https://github.com/samooth/spaceswarm#swarmonconnection-socket-details--)
 
 If you want to multiplex the replication over an existing Spacecore replication stream you can pass
 another stream instance instead of the `isInitiator` boolean.
