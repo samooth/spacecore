@@ -1,5 +1,5 @@
 {
-  "name": "space-core",
+  "name": "bitspacecore",
   "version": "0.0.1",
   "description": "Spacecore is a secure, distributed append-only log",
   "main": "index.js",

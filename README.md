@@ -1,4 +1,4 @@
-# space-core
+# bitspacecore
 
 ### [See the full API docs at docs.pears.com](https://docs.space.bsv.direct/building-blocks/bitspacecore)
 
@@ -20,7 +20,7 @@ Version 10 is not compatible with earlier versions (9 and earlier), but is consi
 ## Install
 
 ```sh
-npm install space-core
+npm install bitspacecore
 ```
 
 > [!NOTE]
