@@ -1,7 +1,7 @@
 const test = require('brittle')
 const b4a = require('b4a')
 const createTempDir = require('test-tmp')
-const SpacecoreStorage = require('../../spacecore-storage')
+const SpacecoreStorage = require('spacecore-storage')
 
 const Spacecore = require('../')
 const { create, createStorage, eventFlush } = require('./helpers')

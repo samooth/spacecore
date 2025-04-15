@@ -1,5 +1,5 @@
 const test = require('brittle')
-const crypto = require('../../spacecore-crypto')
+const crypto = require('spacecore-crypto')
 const b4a = require('b4a')
 const tmpDir = require('test-tmp')
 const c = require('compact-encoding')

@@ -1,8 +1,8 @@
-# bitspacecore
+# Spacecore
 
-### [See the full API docs at docs.space.bsv.direct](https://docs.space.bsv.direct/building-blocks/bitspacecore)
+### [See the full API docs at docs.pears.com](https://docs.pears.com/building-blocks/spacecore)
 
-BitSpacecore is a secure, distributed append-only log.
+Spacecore is a secure, distributed append-only log.
 
 Built for sharing large datasets and streams of real time data
 
@@ -14,14 +14,19 @@ Built for sharing large datasets and streams of real time data
 * **Secure.** Uses signed merkle trees to verify log integrity in real time.
 * **Modular.** Spacecore aims to do one thing and one thing well - distributing a stream of data.
 
+Note that the latest release is Spacecore 10, which adds support for truncate and many other things.
+Version 10 is not compatible with earlier versions (9 and earlier), but is considered LTS, meaning the storage format and wire protocol is forward compatible with future versions.
+
 ## Install
 
 ```sh
-npm install bitspacecore
+npm install spacecore
 ```
 
 > [!NOTE]
-> This readme reflects Spacecore, backed by RocksDB for storage and atomicity.
+> This readme reflects Spacecore 11, our latest major version that is backed by RocksDB for storage and atomicity.
+> Whilst we are fully validating that, the npm dist-tag for latest is set to latest version of Spacecore 10, the previous major, to avoid too much disruption.
+> It will be updated to 11 in a few weeks.
 
 ## API
 
@@ -35,7 +40,7 @@ Make a new Spacecore instance.
 const core = new Spacecore('./directory') // store data in ./directory
 ```
 
-Alternatively you can pass a [Spacecore Storage](https://github.com/samooth/spacecore-storage) or use a [Corestore](https://github.com/samooth/corestore) if you want to make many Spacecores efficiently. Note that `random-access-storage` is no longer supported.
+Alternatively you can pass a [Spacecore Storage](https://github.com/holepunchto/spacecore-storage) or use a [Corestore](https://github.com/holepunchto/corestore) if you want to make many Spacecores efficiently. Note that `random-access-storage` is no longer supported.
 
 `key` can be set to a Spacecore key which is a hash of Spacecore's internal auth manifest, describing how to validate the Spacecore. If you do not set this, it will be loaded from storage. If nothing is previously stored, a new auth manifest will be generated giving you local write access to it.
 
@@ -63,7 +68,7 @@ You can also set valueEncoding to any [compact-encoding](https://github.com/comp
 
 valueEncodings will be applied to individual blocks, even if you append batches. If you want to control encoding at the batch-level, you can use the `encodeBatch` option, which is a function that takes a batch and returns a binary-encoded batch. If you provide a custom valueEncoding, it will not be applied prior to `encodeBatch`.
 
-The user may provide a custom encryption module as `opts.encryption`, which should satisfy the [SpacecoreEncryption](https://github.com/samooth/spacecore-encryption) interface.
+The user may provide a custom encryption module as `opts.encryption`, which should satisfy the [SpacecoreEncryption](https://github.com/holepunchto/spacecore-encryption) interface.
 
 #### `const { length, byteLength } = await core.append(block)`
 
@@ -457,7 +462,7 @@ Create a replication stream. You should pipe this to another Spacecore instance.
 The `isInitiator` argument is a boolean indicating whether you are the initiator of the connection (ie the client)
 or if you are the passive part (ie the server).
 
-If you are using a P2P swarm like [Spaceswarm](https://github.com/samooth/spaceswarm) you can know this by checking if the swarm connection is a client socket or server socket. In Spaceswarm you can check that using the [client property on the peer details object](https://github.com/samooth/spaceswarm#swarmonconnection-socket-details--)
+If you are using a P2P swarm like [Spaceswarm](https://github.com/spaceswarm/spaceswarm) you can know this by checking if the swarm connection is a client socket or server socket. In Spaceswarm you can check that using the [client property on the peer details object](https://github.com/spaceswarm/spaceswarm#swarmonconnection-socket-details--)
 
 If you want to multiplex the replication over an existing Spacecore replication stream you can pass
 another stream instance instead of the `isInitiator` boolean.

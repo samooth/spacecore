@@ -124,6 +124,7 @@ test('sessions - checkout breaks prologue', async function (t) {
   const storage2 = await createStorage(t)
 
   uncaughts.on(noop)
+
   const core = new Spacecore(storage)
 
   for (let i = 0; i < 10; i++) await core.append(b4a.from([i]))

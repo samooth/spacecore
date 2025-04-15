@@ -1,8 +1,7 @@
 const test = require('brittle')
 const b4a = require('b4a')
-const Spacecore = require('..')
 const crypto = require('spacecore-crypto')
-
+const Spacecore = require('..')
 const { create, createStorage, replicate } = require('./helpers')
 
 const fixturesRaw = require('./fixtures/encryption/v11.0.48.cjs')

@@ -1,6 +1,6 @@
 const test = require('brittle')
 const b4a = require('b4a')
-const NoiseSecretStream = require('../../spaceswarm-secret-stream')
+const NoiseSecretStream = require('spaceswarm-secret-stream')
 const { create, createStored, replicate, unreplicate, eventFlush, replicateDebugStream } = require('./helpers')
 const { makeStreamPair } = require('./helpers/networking.js')
 const Spacecore = require('../')
