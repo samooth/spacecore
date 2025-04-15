@@ -7,11 +7,13 @@ async function runTests () {
 
   test.pause()
 
-  await import('./basic.js') // todo: implement storageInfo API
+  await import('./atomic.js')
+  await import('./basic.js')
   await import('./batch.js')
+  await import('./bit-interlude.js')
   await import('./bitfield.js')
-  await import('./clear.js') // todo: replace Info.bytesUsed API
-  // await import('./compat.js') // todo: how to test compat?
+  await import('./clear.js')
+  await import('./compat.js')
   await import('./conflicts.js')
   await import('./core.js')
   await import('./encodings.js')
@@ -22,7 +24,7 @@ async function runTests () {
   await import('./move-to.js')
   await import('./mutex.js')
   await import('./preload.js')
-  // await import('./purge.js') // todo: implement purge
+  await import('./purge.js')
   await import('./remote-bitfield.js')
   await import('./remote-length.js')
   await import('./replicate.js')
@@ -31,7 +33,6 @@ async function runTests () {
   await import('./streams.js')
   await import('./timeouts.js')
   await import('./user-data.js')
-  await import('./atomic.js')
 
   test.resume()
 }
