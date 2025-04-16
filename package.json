@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/holepunchto/spacecore.git"
+    "url": "git+https://github.com/samooth/spacecore.git"
   },
   "contributors": [
     {
@@ -31,9 +31,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/holepunchto/spacecore/issues"
+    "url": "https://github.com/samooth/spacecore/issues"
   },
-  "homepage": "https://github.com/holepunchto/spacecore#readme",
+  "homepage": "https://github.com/samooth/spacecore#readme",
   "files": [
     "index.js",
     "errors.js",
