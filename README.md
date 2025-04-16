@@ -37,7 +37,7 @@ Make a new Spacecore instance.
 const core = new Spacecore('./directory') // store data in ./directory
 ```
 
-Alternatively you can pass a [Spacecore Storage](https://github.com/holepunchto/spacecore-storage) or use a [Corestore](https://github.com/holepunchto/corestore) if you want to make many Spacecores efficiently. Note that `random-access-storage` is no longer supported.
+Alternatively you can pass a [Spacecore Storage](https://github.com/samooth/spacecore-storage) or use a [Corestore](https://github.com/samooth/corestore) if you want to make many Spacecores efficiently. Note that `random-access-storage` is no longer supported.
 
 `key` can be set to a Spacecore key which is a hash of Spacecore's internal auth manifest, describing how to validate the Spacecore. If you do not set this, it will be loaded from storage. If nothing is previously stored, a new auth manifest will be generated giving you local write access to it.
 
