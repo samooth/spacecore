@@ -1,6 +1,6 @@
 # Spacecore
 
-### [See the full API docs at docs.pears.com](https://docs.pears.com/building-blocks/spacecore)
+### [See the full API docs at docs.space.bsv.direct](https://docs.space.bsv.direct/building-blocks/spacecore)
 
 Spacecore is a secure, distributed append-only log.
 
@@ -14,13 +14,10 @@ Built for sharing large datasets and streams of real time data
 * **Secure.** Uses signed merkle trees to verify log integrity in real time.
 * **Modular.** Spacecore aims to do one thing and one thing well - distributing a stream of data.
 
-Note that the latest release is Spacecore 10, which adds support for truncate and many other things.
-Version 10 is not compatible with earlier versions (9 and earlier), but is considered LTS, meaning the storage format and wire protocol is forward compatible with future versions.
-
 ## Install
 
 ```sh
-npm install spacecore
+npm install bitspacecore
 ```
 
 > [!NOTE]
