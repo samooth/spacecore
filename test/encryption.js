@@ -346,15 +346,16 @@ test('encryption backwards compatibility', async function (t) {
   t.is(compat.length, fixtures[0].length)
 
   for (let i = 0; i < compat.length; i++) {
-    t.alike(await compat.get(i, { raw: true }), fixtures[0][i])
+    const da = await compat.get(i, { raw: true })
+    t.alike(da, fixtures[0][i])
   }
-
   // default
   t.comment('test default mode')
   t.is(def.length, fixtures[1].length)
 
   for (let i = 0; i < def.length; i++) {
-    t.alike(await def.get(i, { raw: true }), fixtures[1][i])
+    const da = await def.get(i, { raw: true })
+    t.alike(da, fixtures[1][i])
   }
 
   // not block
@@ -362,7 +363,8 @@ test('encryption backwards compatibility', async function (t) {
   t.is(notBlock.length, fixtures[2].length)
 
   for (let i = 0; i < notBlock.length; i++) {
-    t.alike(await notBlock.get(i, { raw: true }), fixtures[2][i])
+    const da = await notBlock.get(i, { raw: true })
+    t.alike(da, fixtures[2][i])
   }
 
   // compat
@@ -370,7 +372,8 @@ test('encryption backwards compatibility', async function (t) {
   t.is(block.length, fixtures[3].length)
 
   for (let i = 0; i < block.length; i++) {
-    t.alike(await block.get(i, { raw: true }), fixtures[3][i])
+    const da = await block.get(i, { raw: true })
+    t.alike(da, fixtures[3][i])
   }
 })
 
